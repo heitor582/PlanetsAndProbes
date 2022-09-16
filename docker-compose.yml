@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_USER=prova_postgres
+      - POSTGRES_PASSWORD=prova_postgres
+      - POSTGRES_DB=prova_postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATASOURCE=jdbc:postgresql://prova_postgres:5432/prova_postgres
+      - PORT=8080
+  postgres:
+    image: postgres
+    container_name: prova_postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: prova_postgres
+      POSTGRES_PASSWORD: prova_postgres
+      POSTGRES_DB: prova_postgres
+
+networks:
+  default:
+    driver: bridge

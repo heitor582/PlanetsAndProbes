@@ -1,0 +1,26 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${POSTGRES_DATASOURCE:jdbc:postgresql://localhost:5432/prova_postgres}
+    username: ${POSTGRES_USER:prova_postgres}
+    password: ${POSTGRES_PASSWORD:prova_postgres}
+    properties:
+      schema: public
+  jpa:
+    database-plataform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    url: ${POSTGRES_DATASOURCE}
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    schema: public
+    default-schema: public
+
+springdoc:
+  swagger-ui:
+    base-path: ${APP_BASE_PATH:/}
+    url: ${APP_BASE_PATH:/api-docs}
+    configUrl: ${APP_BASE_PATH:/api-docs/swagger-config}
+    disable-swagger-default-url: true
