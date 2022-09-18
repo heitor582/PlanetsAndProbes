@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Planet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id = 0L;
 
     @Column(name = "max_y")
     private int maxY = 0;
