@@ -1,6 +1,3 @@
-http://localhost:8080/swagger-ui/index.html
-search /v3/api-docs 
-
 # Description
 This project is a test for be BackEnd developer at Elo 7.
 
