@@ -10,17 +10,16 @@ spring:
     properties:
       schema: public
   jpa:
-    database-plataform: org.hibernate.dialect.PostgreSQLDialect
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
   flyway:
-    url: ${POSTGRES_DATASOURCE}
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_DATASOURCE:jdbc:postgresql://localhost:5432/prova_postgres}
+    user: ${POSTGRES_USER:prova_postgres}
+    password: ${POSTGRES_PASSWORD:prova_postgres}
     schema: public
     default-schema: public
-
-springdoc:
-  swagger-ui:
-    base-path: ${APP_BASE_PATH:/}
-    url: ${APP_BASE_PATH:/api-docs}
-    configUrl: ${APP_BASE_PATH:/api-docs/swagger-config}
-    disable-swagger-default-url: true
+    baseline-on-migrate: true
+    enabled: true
