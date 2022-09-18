@@ -2,7 +2,7 @@ package com.prova.elo7.planet.entrypoint.rest;
 
 import com.prova.elo7.planet.dataproviders.jpa.entities.Planet;
 import com.prova.elo7.planet.entrypoint.rest.request.CreatePlanetRequest;
-import com.prova.elo7.planet.service.PlanetService;
+import com.prova.elo7.planet.service.PlanetServiceInterface;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/planet")
 @RequiredArgsConstructor
 public class PlanetResource {
-    private final PlanetService planetService;
+    private final PlanetServiceInterface planetService;
 
     @GetMapping
     @Operation(tags = {"Planet"}, summary = "Find all planets")
@@ -43,7 +43,7 @@ public class PlanetResource {
                     @ApiResponse(responseCode = "404")
             }
     )
-    ResponseEntity<Planet> create(@RequestBody @Valid CreatePlanetRequest createPlanetRequest) {
+    ResponseEntity<Planet> create(@Valid @RequestBody CreatePlanetRequest createPlanetRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(planetService.create(
                 createPlanetRequest.getMaxY(),
                 createPlanetRequest.getMaxX(),

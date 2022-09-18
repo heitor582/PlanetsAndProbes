@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PlanetService {
+public class PlanetService implements PlanetServiceInterface {
     private final PlanetRepository planetRepository;
 
     public List<Planet> findAll() {

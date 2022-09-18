@@ -86,8 +86,14 @@ class PlanetServiceTest {
         void deletePlanet() {
             Planet planet = PlanetMock.createPlanet(1L, 5, 5, "Teste");
             given(planetRepository.findById(planet.getId())).willReturn(Optional.of(planet));
-            planetService.delete(planet.getId());
             assertThatCode(() -> planetService.delete(planet.getId())).doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("Throws error when delete planet")
+        void notDeletePlanet() {
+            given(planetRepository.findById(any())).willThrow(PlanetNotFoundException.class);
+            assertThatThrownBy(() -> planetService.delete(any())).isInstanceOf(PlanetNotFoundException.class);
         }
     }
 }
