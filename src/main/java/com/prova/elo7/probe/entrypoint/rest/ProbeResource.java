@@ -53,7 +53,7 @@ public class ProbeResource {
             }
     )
     ResponseEntity<Probe> move(@PathVariable Long id,  @Valid @RequestBody MoveProbeRequest moveProbeRequest) {
-        if(!moveProbeRequest.getCommand().matches("ˆ[LMR]*$")) {
+        if(!moveProbeRequest.getCommand().matches("(L|M|R)*")) {
             throw new MoveCommandException();
         }
         return ResponseEntity.ok(probeService.move(id, moveProbeRequest.getCommand()));
