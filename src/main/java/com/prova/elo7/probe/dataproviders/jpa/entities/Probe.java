@@ -25,7 +25,7 @@ public class Probe {
 
     private String name = "";
 
-    @ManyToOne
+    @OneToOne
     private Planet planet;
 
     @Enumerated(EnumType.STRING)

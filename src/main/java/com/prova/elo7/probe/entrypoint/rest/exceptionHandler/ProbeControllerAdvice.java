@@ -3,6 +3,7 @@ package com.prova.elo7.probe.entrypoint.rest.exceptionHandler;
 import com.prova.elo7.probe.exceptions.MoveCommandException;
 import com.prova.elo7.probe.exceptions.ProbeNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,5 +20,10 @@ public class ProbeControllerAdvice {
     @ExceptionHandler(value = {MoveCommandException.class})
     public ResponseEntity<Object> handleWrongMoveCommand(MoveCommandException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleDataIntegrity() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Planet already has a probe");
     }
 }

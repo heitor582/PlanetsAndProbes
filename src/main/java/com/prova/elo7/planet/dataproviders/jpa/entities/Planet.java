@@ -18,7 +18,9 @@ public class Planet {
 
     @Column(name = "max_y")
     private int maxY = 0;
+
     @Column(name = "max_x")
     private int maxX = 0;
+
     private String name = "";
 }

@@ -4,7 +4,6 @@ import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
 import com.prova.elo7.probe.entrypoint.rest.request.CreateProbeRequest;
 import com.prova.elo7.probe.entrypoint.rest.request.MoveProbeRequest;
 import com.prova.elo7.probe.exceptions.MoveCommandException;
-import com.prova.elo7.probe.service.ProbeService;
 import com.prova.elo7.probe.service.ProbeServiceInterface;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,7 +28,8 @@ public class ProbeResource {
             value = {
                     @ApiResponse(responseCode = "201"),
                     @ApiResponse(responseCode = "400"),
-                    @ApiResponse(responseCode = "404")
+                    @ApiResponse(responseCode = "404"),
+                    @ApiResponse(responseCode = "500")
             }
     )
     ResponseEntity<Probe> create(@Valid @RequestBody CreateProbeRequest createProbeRequest){
