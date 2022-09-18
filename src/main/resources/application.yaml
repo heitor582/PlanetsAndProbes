@@ -22,4 +22,19 @@ spring:
     schema: public
     default-schema: public
     baseline-on-migrate: true
+    check-location: true
+    locations: classpath:elo7/src/main/java/db/migration
     enabled: true
+
+springdoc:
+  api-docs:
+    groups:
+      enabled: true
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui
+    url: /api-docs
+    configUrl: /api-docs/swagger-config
+    doc-expansion: none
