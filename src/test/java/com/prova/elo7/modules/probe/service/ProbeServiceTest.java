@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -107,6 +108,16 @@ public class ProbeServiceTest {
         void notFindProbeById() {
             given(probeRepository.findById(any())).willReturn(Optional.empty());
             assertThatThrownBy(() -> probeService.info(any())).isInstanceOf(ProbeNotFoundException.class);
+        }
+
+        @Test
+        @DisplayName("Find all probes")
+        void findAll() {
+            Probe probe1 = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            Probe probe2 = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            given(probeRepository.findAll()).willReturn(List.of(probe1,probe2));
+            List<Probe> probes = probeService.findAll();
+            assertThat(probes).isEqualTo(List.of(probe1,probe2));
         }
     }
 

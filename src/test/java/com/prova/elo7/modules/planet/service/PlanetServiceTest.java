@@ -72,7 +72,7 @@ class PlanetServiceTest {
             Planet planet2 = PlanetMock.createPlanet(2L, 5, 5, "Teste2");
             given(planetRepository.findAll()).willReturn(List.of(planet1, planet2));
             List<Planet> planetsFound = planetService.findAll();
-            assertThat(planetsFound).isEqualTo(planetsFound);
+            assertThat(planetsFound).isEqualTo(List.of(planet1, planet2));
         }
     }
 
