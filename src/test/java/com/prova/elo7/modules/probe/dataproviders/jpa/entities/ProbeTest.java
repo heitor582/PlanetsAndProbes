@@ -33,17 +33,17 @@ public class ProbeTest {
                     Arguments.of(1, 2, Direction.UP, 1, 3, Direction.UP, "M"),
                     Arguments.of(1, 2, Direction.UP, 1, 2, Direction.RIGHT, "R"),
                     Arguments.of(1, 2, Direction.UP, 1, 2, Direction.LEFT, "L"),
-                    Arguments.of(1, 2, Direction.LEFT, 1, 2, Direction.LEFT, "M"),
+                    Arguments.of(1, 5, Direction.UP, 1, 5, Direction.UP, "M"),
 
                     Arguments.of(1, 2, Direction.DOWN, 1, 2, Direction.RIGHT, "L"),
                     Arguments.of(1, 2, Direction.DOWN, 1, 2, Direction.LEFT, "R"),
                     Arguments.of(1, 2, Direction.DOWN, 1, 1, Direction.DOWN, "M"),
-                    Arguments.of(1,1, Direction.DOWN, 1, 1, Direction.DOWN, "M"),
+                    Arguments.of(1,1, Direction.DOWN, 1, 0, Direction.DOWN, "M"),
 
                     Arguments.of(2, 2, Direction.LEFT, 1, 2, Direction.LEFT, "M"),
                     Arguments.of(1, 2, Direction.LEFT, 1, 2, Direction.DOWN, "L"),
                     Arguments.of(1, 2, Direction.LEFT, 1, 2, Direction.UP, "R"),
-                    Arguments.of(1, 2, Direction.LEFT, 1, 2, Direction.LEFT, "M"),
+                    Arguments.of(1, 2, Direction.LEFT, 0, 2, Direction.LEFT, "M"),
 
                     Arguments.of(1, 2, Direction.RIGHT, 2, 2, Direction.RIGHT, "M"),
                     Arguments.of(1, 2, Direction.RIGHT, 1, 2, Direction.UP, "L"),

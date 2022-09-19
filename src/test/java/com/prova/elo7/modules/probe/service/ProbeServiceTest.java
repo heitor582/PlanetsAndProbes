@@ -145,7 +145,7 @@ public class ProbeServiceTest {
 
         private static Stream<Arguments> provideProbeInitAndFinal() {
             return Stream.of(
-                    Arguments.of(1, 2, Direction.UP, 2, 3, Direction.UP, "LMLMLMLMM"),
+                    Arguments.of(1, 2, Direction.UP, 1, 3, Direction.UP, "LMLMLMLMM"),
                     Arguments.of(3, 3, Direction.RIGHT, 5, 1, Direction.UP, "MMRMMRMRRML")
             );
         }
