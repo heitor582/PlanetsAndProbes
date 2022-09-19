@@ -72,14 +72,14 @@ public class Probe {
     }
 
     private void moveForward() {
-        if (this.direction == Direction.UP && this.cordY < this.planet.getMaxY()) {
-            this.cordY++;
-        } else if (this.direction == Direction.LEFT && this.cordX > -this.planet.getMaxX()) {
-            this.cordX--;
-        } else if (this.direction == Direction.DOWN && this.cordY > -this.planet.getMaxY()) {
-            this.cordY--;
-        } else if(this.direction == Direction.RIGHT && this.cordX < this.planet.getMaxX()){
-            this.cordX++;
+        if (this.direction == Direction.UP) {
+            this.cordY = this.cordY < this.planet.getMaxY() ? this.cordY + 1 : this.cordY * -1;
+        } else if (this.direction == Direction.LEFT) {
+            this.cordX = this.cordX > -this.planet.getMaxX() ? this.cordX - 1 : this.cordX * -1;
+        } else if (this.direction == Direction.DOWN) {
+            this.cordY = this.cordY > -this.planet.getMaxY() ? this.cordY - 1 : this.cordY * -1;
+        } else if(this.direction == Direction.RIGHT){
+            this.cordX = this.cordX < this.planet.getMaxX() ? this.cordX + 1 : this.cordX * -1 ;
         }
     }
 }

@@ -13,6 +13,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_DATASOURCE=jdbc:postgresql://prova_postgres:5432/prova_postgres
       - PORT=8080
+      - FLYWAY_LOCATION=classpath:/db/migration
   postgres:
     image: postgres
     container_name: prova_postgres

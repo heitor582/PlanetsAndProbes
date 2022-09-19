@@ -33,7 +33,7 @@ public class ProbeTest {
                     Arguments.of(1, 2, Direction.UP, 1, 3, Direction.UP, "M"),
                     Arguments.of(1, 2, Direction.UP, 1, 2, Direction.RIGHT, "R"),
                     Arguments.of(1, 2, Direction.UP, 1, 2, Direction.LEFT, "L"),
-                    Arguments.of(1, 5, Direction.UP, 1, 5, Direction.UP, "M"),
+                    Arguments.of(1, 5, Direction.UP, 1, -5, Direction.UP, "M"),
 
                     Arguments.of(1, 2, Direction.DOWN, 1, 2, Direction.RIGHT, "L"),
                     Arguments.of(1, 2, Direction.DOWN, 1, 2, Direction.LEFT, "R"),
@@ -48,7 +48,7 @@ public class ProbeTest {
                     Arguments.of(1, 2, Direction.RIGHT, 2, 2, Direction.RIGHT, "M"),
                     Arguments.of(1, 2, Direction.RIGHT, 1, 2, Direction.UP, "L"),
                     Arguments.of(1, 2, Direction.RIGHT, 1, 2, Direction.DOWN, "R"),
-                    Arguments.of(5, 2, Direction.RIGHT, 5, 2, Direction.RIGHT, "M")
+                    Arguments.of(5, 2, Direction.RIGHT, -5, 2, Direction.RIGHT, "M")
 
             );
         }
