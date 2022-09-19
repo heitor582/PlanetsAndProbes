@@ -38,21 +38,9 @@
 				},
 				{
 					"name": "Find all",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"maxY\": 5,\n  \"maxX\": 5,\n  \"name\": \"string\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "http://localhost:8080/planet",
 							"protocol": "http",
@@ -216,15 +204,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/probe/",
+							"raw": "http://localhost:8080/probe",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"probe",
-								""
+								"probe"
 							]
 						}
 					},
