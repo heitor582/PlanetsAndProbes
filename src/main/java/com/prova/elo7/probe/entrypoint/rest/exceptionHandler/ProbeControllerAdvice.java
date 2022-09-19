@@ -21,9 +21,4 @@ public class ProbeControllerAdvice {
     public ResponseEntity<Object> handleWrongMoveCommand(MoveCommandException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
-
-    @ExceptionHandler(value = {DataIntegrityViolationException.class})
-    public ResponseEntity<Object> handleDataIntegrity() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Planet already has a probe");
-    }
 }

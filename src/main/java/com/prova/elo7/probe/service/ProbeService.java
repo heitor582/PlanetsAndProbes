@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +48,9 @@ public class ProbeService implements ProbeServiceInterface {
     public void delete(Long id) {
         Probe probe = probeRepository.findById(id).orElseThrow(() -> new ProbeNotFoundException(id));
         probeRepository.deleteById(probe.getId());
+    }
+
+    public List<Probe> findAll() {
+        return probeRepository.findAll();
     }
 }

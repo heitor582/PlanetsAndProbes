@@ -14,12 +14,25 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/probe")
 @RequiredArgsConstructor
 public class ProbeResource {
     private final ProbeServiceInterface probeService;
+
+    @GetMapping
+    @Operation(tags = {"Probe"}, summary = "Find all probes")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+            }
+    )
+    ResponseEntity<List<Probe>> findAll() {
+        return ResponseEntity.ok(probeService.findAll());
+    }
 
     @PostMapping
     @Operation(tags = {"Probe"}, summary = "Create a probe and associate a planet by id")
@@ -28,8 +41,7 @@ public class ProbeResource {
             value = {
                     @ApiResponse(responseCode = "201"),
                     @ApiResponse(responseCode = "400"),
-                    @ApiResponse(responseCode = "404"),
-                    @ApiResponse(responseCode = "500")
+                    @ApiResponse(responseCode = "404")
             }
     )
     ResponseEntity<Probe> create(@Valid @RequestBody CreateProbeRequest createProbeRequest){

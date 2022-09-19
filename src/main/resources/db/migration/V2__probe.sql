@@ -4,7 +4,7 @@ create table probe (
   cord_y INTEGER not null,
   direction VARCHAR(5) not null,
   name varchar(200) not null,
-  planet_id INTEGER not null UNIQUE,
+  planet_id INTEGER not null,
    CONSTRAINT fk_id_planet FOREIGN KEY (planet_id)
    REFERENCES planet(id)
    ON DELETE CASCADE

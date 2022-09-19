@@ -48,4 +48,4 @@ In the postman click import -> Upload Files
 ![image](https://user-images.githubusercontent.com/58075535/124396554-9bd2ca80-dce0-11eb-9ceb-69372af6613f.png)
 
 
-Import the json that is at the root of the project called 'Elo7.postman_collection.json'
+Import the json that is at the root of the project called 'Elo7.json'
