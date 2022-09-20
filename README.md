@@ -19,10 +19,10 @@ $ git clone https://github.com/heitor582/PlanetsAndProbes.git
 # Enter the folder
 $ cd ./PlanetsAndProbes
 ```
-# Instalation
+# Installation
 ## Running the app with docker
 ```bash
-# Iniciate the docker
+# Initiate the docker
 $ docker-compose up --build -d
 ```
 # Unit Test
@@ -32,7 +32,7 @@ $ docker-compose up --build -d
 $ ./gradlew test
 ```
 # Executing OpenApi/Swagger
-In the url after run the program access for enter in the swagger and see all the routes with the respectives parameters.
+In the url after run the program access for enter the swagger and see all the routes with the respective parameters.
  ```bash
  http://localhost:8080/swagger-ui/index.html
 ```

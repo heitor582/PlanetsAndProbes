@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - postgres
     environment:
@@ -18,7 +18,7 @@ services:
     image: postgres
     container_name: prova_postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: prova_postgres
       POSTGRES_PASSWORD: prova_postgres
