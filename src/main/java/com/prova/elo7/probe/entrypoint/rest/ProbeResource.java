@@ -28,10 +28,12 @@ public class ProbeResource {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "204"),
             }
     )
     ResponseEntity<List<Probe>> findAll() {
-        return ResponseEntity.ok(probeService.findAll());
+        List<Probe> probes = probeService.findAll();
+        return probes.size() > 0 ? ResponseEntity.ok(probes) : ResponseEntity.noContent().build();
     }
 
     @PostMapping

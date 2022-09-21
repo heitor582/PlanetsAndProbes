@@ -26,11 +26,13 @@ public class PlanetResource {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "204"),
             }
     )
 
     ResponseEntity<List<Planet>> findAll() {
-        return ResponseEntity.ok(planetService.findAll());
+        List<Planet> planets = planetService.findAll();
+        return planets.size() > 0 ? ResponseEntity.ok(planets) : ResponseEntity.noContent().build();
     }
 
     @PostMapping
