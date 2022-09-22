@@ -9,6 +9,9 @@ import com.prova.elo7.probe.service.ProbeServiceInterface;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +35,14 @@ public class ProbeResource {
                     @ApiResponse(responseCode = "204"),
             }
     )
-    ResponseEntity<List<Probe>> findAll() {
-        List<Probe> probes = probeService.findAll();
-        return probes.size() > 0 ? ResponseEntity.ok(probes) : ResponseEntity.noContent().build();
+    ResponseEntity<Page<Probe>> findAll(
+            @PageableDefault(
+                    page = 0,
+                    size = 10,
+            sort = {"id"}) Pageable page
+    ) {
+        Page<Probe> probes = probeService.findAll(page);
+        return probes.getContent().size() > 0 ? ResponseEntity.ok(probes) : ResponseEntity.noContent().build();
     }
 
     @PostMapping

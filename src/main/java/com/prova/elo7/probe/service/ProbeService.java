@@ -9,6 +9,8 @@ import com.prova.elo7.probe.exceptions.ProbeLandingException;
 import com.prova.elo7.probe.exceptions.ProbeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,8 +56,8 @@ public class ProbeService implements ProbeServiceInterface {
         probeRepository.deleteById(probe.getId());
     }
 
-    public List<Probe> findAll() {
-        return probeRepository.findAll();
+    public Page<Probe> findAll(Pageable page) {
+        return probeRepository.findAll(page);
     }
 
     public Probe update(Long id, int cordX, int cordY, Direction direction, Long idPlanet, String name) {
