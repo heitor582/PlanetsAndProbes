@@ -11,4 +11,5 @@ public interface ProbeServiceInterface {
     public Probe info(Long id);
     public void delete(Long id);
     public List<Probe> findAll();
+    public Probe update(Long id, int cordX, int cordY, Direction direction, Long idPlanet, String name);
 }

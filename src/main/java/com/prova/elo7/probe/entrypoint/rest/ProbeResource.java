@@ -3,6 +3,7 @@ package com.prova.elo7.probe.entrypoint.rest;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
 import com.prova.elo7.probe.entrypoint.rest.request.CreateProbeRequest;
 import com.prova.elo7.probe.entrypoint.rest.request.MoveProbeRequest;
+import com.prova.elo7.probe.entrypoint.rest.request.UpdateProbeRequest;
 import com.prova.elo7.probe.exceptions.MoveCommandException;
 import com.prova.elo7.probe.service.ProbeServiceInterface;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,7 +57,7 @@ public class ProbeResource {
         ));
     }
 
-    @PostMapping("/{id}/move")
+    @PatchMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(tags = {"Probe"}, summary = "Move the probe around planet")
     @ApiResponses(
@@ -98,5 +99,26 @@ public class ProbeResource {
     ResponseEntity<String> delete(@PathVariable Long id) {
         probeService.delete(id);
         return ResponseEntity.ok("Probe successfully deleted with id " + id);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(tags = {"Probe"}, summary = "Update a probe by id")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    ResponseEntity<Probe> update(@PathVariable Long id, @Valid @RequestBody UpdateProbeRequest updateProbeRequest){
+        return ResponseEntity.ok(probeService.update(
+                id,
+                updateProbeRequest.getCordX(),
+                updateProbeRequest.getCordY(),
+                updateProbeRequest.getDirection(),
+                updateProbeRequest.getIdPlanet(),
+                updateProbeRequest.getName()
+        ));
     }
 }

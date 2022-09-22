@@ -57,4 +57,19 @@ public class ProbeService implements ProbeServiceInterface {
     public List<Probe> findAll() {
         return probeRepository.findAll();
     }
+
+    public Probe update(Long id, int cordX, int cordY, Direction direction, Long idPlanet, String name) {
+        Probe probe = probeRepository.findById(id)
+                .orElseThrow(() -> new ProbeNotFoundException(id));
+        Planet planet = planetService.find(idPlanet);
+        if(Math.abs(cordX) > planet.getMaxX() || Math.abs(cordY) > planet.getMaxY()) {
+            throw new ProbeLandingException();
+        }
+        probe.setCordX(cordX);
+        probe.setCordY(cordY);
+        probe.setDirection(direction);
+        probe.setName(name);
+        probe.setPlanet(planet);
+        return probeRepository.save(probe);
+    }
 }
