@@ -5,6 +5,7 @@ import com.prova.elo7.planet.dataproviders.jpa.PlanetRepository;
 import com.prova.elo7.planet.dataproviders.jpa.entities.Planet;
 import com.prova.elo7.planet.exceptions.PlanetNotFoundException;
 import com.prova.elo7.planet.service.PlanetService;
+import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,11 +73,12 @@ class PlanetServiceTest {
         @Test
         @DisplayName("Find all planets")
         void findAllPlanets() {
+            Pageable page = PageRequest.of(0,10);
             Planet planet1 = PlanetMock.createPlanet(1L, 5, 5, "Teste");
             Planet planet2 = PlanetMock.createPlanet(2L, 5, 5, "Teste2");
-            given(planetRepository.findAll()).willReturn(List.of(planet1, planet2));
-            List<Planet> planetsFound = planetService.findAll();
-            assertThat(planetsFound).isEqualTo(List.of(planet1, planet2));
+            given(planetRepository.findAll(page)).willReturn(new PageImpl<Planet>(List.of(planet1,planet2)));
+            Page<Planet> planetsFound = planetService.findAll(page);
+            assertThat(planetsFound).isEqualTo(new PageImpl<Planet>(List.of(planet1,planet2)));
         }
     }
 

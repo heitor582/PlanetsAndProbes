@@ -19,6 +19,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -129,11 +133,12 @@ public class ProbeServiceTest {
         @Test
         @DisplayName("Find all probes")
         void findAll() {
+            Pageable page = PageRequest.of(0,10);
             Probe probe1 = ProbeMock.createProbe(1L,1,2, Direction.UP);
             Probe probe2 = ProbeMock.createProbe(1L,1,2, Direction.UP);
-            given(probeRepository.findAll()).willReturn(List.of(probe1,probe2));
-            List<Probe> probes = probeService.findAll();
-            assertThat(probes).isEqualTo(List.of(probe1,probe2));
+            given(probeRepository.findAll(page)).willReturn(new PageImpl<Probe>(List.of(probe1,probe2)));
+            Page<Probe> probes = probeService.findAll(page);
+            assertThat(probes).isEqualTo(new PageImpl<Probe>(List.of(probe1,probe2)));
         }
     }
 
