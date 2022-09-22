@@ -6,6 +6,7 @@ import com.prova.elo7.planet.service.PlanetServiceInterface;
 import com.prova.elo7.probe.dataproviders.jpa.ProbeRepository;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Direction;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
+import com.prova.elo7.probe.exceptions.ProbeLandingException;
 import com.prova.elo7.probe.exceptions.ProbeNotFoundException;
 import com.prova.elo7.probe.service.ProbeService;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +48,7 @@ public class ProbeServiceTest {
         @DisplayName("Create Probe")
         void createProbe() {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
             given(probeRepository.save(any())).willReturn(probe);
             Probe createdProbe = probeService.create(
               probe.getCordX(),
@@ -71,6 +73,20 @@ public class ProbeServiceTest {
                     5L,
                     probe.getName()
             )).isInstanceOf(PlanetNotFoundException.class);
+        }
+
+        @Test
+        @DisplayName("Not create Probe when try to landing out of bound")
+        void notCreateProbeOutOfBound() {
+            Probe probe = ProbeMock.createProbe(1L,5,-7, Direction.UP);
+            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            assertThatThrownBy(() -> probeService.create(
+                    probe.getCordX(),
+                    probe.getCordY(),
+                    probe.getDirection(),
+                    probe.getPlanet().getId(),
+                    probe.getName()
+            )).isInstanceOf(ProbeLandingException.class);
         }
     }
 
@@ -129,7 +145,7 @@ public class ProbeServiceTest {
         void moveProbe(int initX, int initY, Direction initDirection, int finalX, int finalY, Direction finalDirection, String commands) {
             Probe probe = ProbeMock.createProbe(1L, initX, initY, initDirection);
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
-            Probe probeAfterMoved = probeService.move(probe.getId(), commands);
+            probeService.move(probe.getId(), commands);
 
             assertThat(probe.getCordX()).isEqualTo(finalX);
             assertThat(probe.getCordY()).isEqualTo(finalY);
