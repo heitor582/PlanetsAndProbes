@@ -5,6 +5,7 @@ import com.prova.elo7.planet.service.PlanetServiceInterface;
 import com.prova.elo7.probe.dataproviders.jpa.ProbeRepository;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Direction;
+import com.prova.elo7.probe.exceptions.ProbeLandingException;
 import com.prova.elo7.probe.exceptions.ProbeNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,15 @@ public class ProbeService implements ProbeServiceInterface {
     private final PlanetServiceInterface planetService;
 
     public Probe create(int cordX, int cordY, Direction direction, Long idPlanet, String name) {
+        Planet planet = planetService.find(idPlanet);
         Probe probe = new Probe();
+        if(Math.abs(cordX) > planet.getMaxX() || Math.abs(cordY) > planet.getMaxY()) {
+            throw new ProbeLandingException();
+        }
         probe.setCordX(cordX);
         probe.setCordY(cordY);
         probe.setDirection(direction);
         probe.setName(name);
-        Planet planet = planetService.find(idPlanet);
         probe.setPlanet(planet);
         return probeRepository.save(probe);
     }
