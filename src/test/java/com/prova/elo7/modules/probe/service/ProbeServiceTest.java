@@ -166,4 +166,27 @@ public class ProbeServiceTest {
             );
         }
     }
+
+    @Nested
+    class UpdateProbe {
+        @Test
+        @DisplayName("Update probe by id")
+        void updateProbe() {
+            Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
+
+            probeService.update(
+              probe.getId(),
+              3,
+              4,
+              Direction.RIGHT,
+                    probe.getPlanet().getId(),
+                    probe.getName()
+            );
+            assertThat(probe.getCordY()).isEqualTo(4);
+            assertThat(probe.getCordX()).isEqualTo(3);
+            assertThat(probe.getDirection()).isEqualTo(Direction.RIGHT);
+        }
+    }
 }
