@@ -39,9 +39,9 @@ public final class Probe {
 
         for(String command: commands.split("")) {
             if(command.equals("L")) {
-                tempDirection = this.turnLeft(tempDirection);
+                tempDirection = tempDirection.turnLeft();
             } else if (command.equals("R")) {
-                tempDirection = this.turnRight(tempDirection);
+                tempDirection = tempDirection.turnRight();
             } else {
                 if(tempDirection == Direction.DOWN || tempDirection == Direction.UP){
                     tempY = moveY(tempY, tempDirection, yAxes);
@@ -52,30 +52,6 @@ public final class Probe {
         }
 
         return new Probe(this.getId(), tempX, tempY, this.getName(), this.getPlanet(),tempDirection);
-    }
-
-    private Direction turnRight(Direction direction) {
-        if (direction == Direction.UP) {
-            return Direction.RIGHT;
-        } else if (direction == Direction.RIGHT) {
-            return Direction.DOWN;
-        } else if (direction == Direction.DOWN) {
-            return Direction.LEFT;
-        } else {
-            return Direction.UP;
-        }
-    }
-
-    private Direction turnLeft(Direction direction) {
-        if (direction == Direction.UP) {
-            return Direction.LEFT;
-        } else if (direction == Direction.LEFT) {
-            return  Direction.DOWN;
-        } else if (direction == Direction.DOWN) {
-            return Direction.RIGHT;
-        } else {
-            return Direction.UP;
-        }
     }
 
     private int moveX(int x, Direction direction, List<Integer> xAxes) {
