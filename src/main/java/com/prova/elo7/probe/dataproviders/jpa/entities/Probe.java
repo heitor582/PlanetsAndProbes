@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -31,7 +32,7 @@ public final class Probe {
     @Enumerated(EnumType.STRING)
     private Direction direction = Direction.UP;
 
-    public Probe move(String commands) {
+    public Probe move(String commands, List<Integer> xAxes, List<Integer> yAxes) {
         int tempX = this.getCordX();
         int tempY = this.getCordY();
         Direction tempDirection = this.direction;
@@ -43,9 +44,9 @@ public final class Probe {
                 tempDirection = this.turnRight(tempDirection);
             } else {
                 if(tempDirection == Direction.DOWN || tempDirection == Direction.UP){
-                    tempY = moveY(tempY, tempDirection);
+                    tempY = moveY(tempY, tempDirection, yAxes);
                 } else {
-                    tempX = moveX(tempX, tempDirection);
+                    tempX = moveX(tempX, tempDirection, xAxes);
                 }
             }
         }
@@ -77,19 +78,25 @@ public final class Probe {
         }
     }
 
-    private int moveX(int x, Direction direction) {
+    private int moveX(int x, Direction direction, List<Integer> xAxes) {
+        int tempX = 0;
         if (direction == Direction.LEFT) {
-            return x > -this.planet.getMaxX() ? x - 1 : x * -1;
+            tempX =  x > -this.planet.getMaxX() ? x - 1 : x * -1;
         } else {
-            return x < this.planet.getMaxX() ? x + 1 : x * -1 ;
+            tempX =  x < this.planet.getMaxX() ? x + 1 : x * -1 ;
         }
+
+        return xAxes.contains(x) ? x : tempX;
     }
 
-    private int moveY(int y, Direction direction) {
+    private int moveY(int y, Direction direction, List<Integer> yAxes) {
+        int tempY = 0;
         if(direction == Direction.UP){
-            return y < this.planet.getMaxY() ? y + 1 : y * -1;
+            tempY = y < this.planet.getMaxY() ? y + 1 : y * -1;
         } else {
-            return y > -this.planet.getMaxY() ? y - 1 : y * -1;
+            tempY =  y > -this.planet.getMaxY() ? y - 1 : y * -1;
         }
+
+        return yAxes.contains(tempY) ? y : tempY;
     }
 }

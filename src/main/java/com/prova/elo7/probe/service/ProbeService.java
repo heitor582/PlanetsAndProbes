@@ -13,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +36,12 @@ public class ProbeService implements ProbeServiceInterface {
     }
 
     public Probe move(Long id, String commands) {
-            Probe probe = probeRepository.findById(id)
+        Probe probe = probeRepository.findById(id)
                     .orElseThrow(() -> new ProbeNotFoundException(id));
-
-            return probeRepository.save(probe.move(commands));
+        List<Probe> probes = probeRepository.findProbesInSamePlanet(probe.getPlanet().getId());
+        List<Integer> xAxes = probes.stream().map(Probe::getCordX).collect(Collectors.toList());
+        List<Integer> yAxes = probes.stream().map(Probe::getCordY).collect(Collectors.toList());
+        return probeRepository.save(probe.move(commands, xAxes, yAxes));
     }
 
     public Probe info(Long id) {

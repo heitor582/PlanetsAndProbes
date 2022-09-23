@@ -150,7 +150,7 @@ public class ProbeServiceTest {
         void moveProbe(int initX, int initY, Direction initDirection, int finalX, int finalY, Direction finalDirection, String commands) {
             Probe probe = ProbeMock.createProbe(1L, initX, initY, initDirection);
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
-            given(probeRepository.save(any())).willReturn(probe.move(commands));
+            given(probeRepository.save(any())).willReturn(probe.move(commands, List.of(), List.of()));
             Probe movedProbe = probeService.move(probe.getId(), commands);
 
             assertThat(movedProbe.getCordX()).isEqualTo(finalX);
@@ -163,6 +163,21 @@ public class ProbeServiceTest {
         void notFindProbeById() {
             given(probeRepository.findById(any())).willReturn(Optional.empty());
             assertThatThrownBy(() -> probeService.move(any(), "LMLMLMLMM")).isInstanceOf(ProbeNotFoundException.class);
+        }
+
+        @Test
+        @DisplayName("Move with other probes in the same planet")
+        void moveWithOtherProbes() {
+            Probe probe = ProbeMock.createProbe(1L, 1, 2, Direction.UP);
+            String commands = "LLMMR";
+            given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
+            given(probeRepository.findProbesInSamePlanet(probe.getPlanet().getId())).willReturn(List.of(ProbeMock.createProbe(2L, 1, 1, Direction.UP)));
+            given(probeRepository.save(any())).willReturn(probe.move(commands, List.of(1), List.of(1)));
+            Probe movedProbe = probeService.move(probe.getId(), commands);
+
+            assertThat(movedProbe.getCordX()).isEqualTo(1);
+            assertThat(movedProbe.getCordY()).isEqualTo(2);
+            assertThat(movedProbe.getDirection()).isEqualTo(Direction.LEFT);
         }
 
         private static Stream<Arguments> provideProbeInitAndFinal() {

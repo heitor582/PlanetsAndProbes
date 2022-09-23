@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +22,7 @@ public class ProbeTest {
         @DisplayName("Move probe")
         void moveProbe(int initX, int initY, Direction initDirection, int finalX, int finalY, Direction finalDirection, String command) {
             Probe probe = ProbeMock.createProbe(1L, initX, initY, initDirection);
-            Probe movedProbe = probe.move(command);
+            Probe movedProbe = probe.move(command, List.of(), List.of());
 
             assertThat(movedProbe.getCordX()).isEqualTo(finalX);
             assertThat(movedProbe.getCordY()).isEqualTo(finalY);
