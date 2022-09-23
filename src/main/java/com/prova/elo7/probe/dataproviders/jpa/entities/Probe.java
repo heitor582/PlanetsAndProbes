@@ -2,17 +2,17 @@ package com.prova.elo7.probe.dataproviders.jpa.entities;
 
 import com.prova.elo7.planet.dataproviders.jpa.entities.Planet;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "probe")
-public class Probe {
+public final class Probe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,55 +31,65 @@ public class Probe {
     @Enumerated(EnumType.STRING)
     private Direction direction = Direction.UP;
 
-    public void move(String command) {
-        if(command.equals("L") || command.equals("R")) {
-            this.turn(command);
+    public Probe move(String commands) {
+        int tempX = this.getCordX();
+        int tempY = this.getCordY();
+        Direction tempDirection = this.direction;
+
+        for(String command: commands.split("")) {
+            if(command.equals("L")) {
+                tempDirection = this.turnLeft(tempDirection);
+            } else if (command.equals("R")) {
+                tempDirection = this.turnRight(tempDirection);
+            } else {
+                if(tempDirection == Direction.DOWN || tempDirection == Direction.UP){
+                    tempY = moveY(tempY, tempDirection);
+                } else {
+                    tempX = moveX(tempX, tempDirection);
+                }
+            }
+        }
+
+        return new Probe(this.getId(), tempX, tempY, this.getName(), this.getPlanet(),tempDirection);
+    }
+
+    private Direction turnRight(Direction direction) {
+        if (direction == Direction.UP) {
+            return Direction.RIGHT;
+        } else if (direction == Direction.RIGHT) {
+            return Direction.DOWN;
+        } else if (direction == Direction.DOWN) {
+            return Direction.LEFT;
         } else {
-            this.moveForward();
+            return Direction.UP;
         }
     }
 
-    private void turn(String command) {
-        if(command.equals("L")) {
-            this.turnLeft();
-        }else {
-            this.turnRight();
-        }
-    }
-
-    private void turnRight() {
-        if (this.direction == Direction.UP) {
-            this.direction = Direction.RIGHT;
-        } else if (this.direction == Direction.RIGHT) {
-            this.direction = Direction.DOWN;
-        } else if (this.direction == Direction.DOWN) {
-            this.direction = Direction.LEFT;
+    private Direction turnLeft(Direction direction) {
+        if (direction == Direction.UP) {
+            return Direction.LEFT;
+        } else if (direction == Direction.LEFT) {
+            return  Direction.DOWN;
+        } else if (direction == Direction.DOWN) {
+            return Direction.RIGHT;
         } else {
-            this.direction = Direction.UP;
+            return Direction.UP;
         }
     }
 
-    private void turnLeft() {
-        if (this.direction == Direction.UP) {
-            this.direction = Direction.LEFT;
-        } else if (this.direction == Direction.LEFT) {
-            this.direction = Direction.DOWN;
-        } else if (this.direction == Direction.DOWN) {
-            this.direction = Direction.RIGHT;
+    private int moveX(int x, Direction direction) {
+        if (direction == Direction.LEFT) {
+            return x > -this.planet.getMaxX() ? x - 1 : x * -1;
         } else {
-            this.direction = Direction.UP;
+            return x < this.planet.getMaxX() ? x + 1 : x * -1 ;
         }
     }
 
-    private void moveForward() {
-        if (this.direction == Direction.UP) {
-            this.cordY = this.cordY < this.planet.getMaxY() ? this.cordY + 1 : this.cordY * -1;
-        } else if (this.direction == Direction.LEFT) {
-            this.cordX = this.cordX > -this.planet.getMaxX() ? this.cordX - 1 : this.cordX * -1;
-        } else if (this.direction == Direction.DOWN) {
-            this.cordY = this.cordY > -this.planet.getMaxY() ? this.cordY - 1 : this.cordY * -1;
-        } else if(this.direction == Direction.RIGHT){
-            this.cordX = this.cordX < this.planet.getMaxX() ? this.cordX + 1 : this.cordX * -1 ;
+    private int moveY(int y, Direction direction) {
+        if(direction == Direction.UP){
+            return y < this.planet.getMaxY() ? y + 1 : y * -1;
+        } else {
+            return y > -this.planet.getMaxY() ? y - 1 : y * -1;
         }
     }
 }

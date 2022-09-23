@@ -13,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -25,25 +23,20 @@ public class ProbeService implements ProbeServiceInterface {
 
     public Probe create(int cordX, int cordY, Direction direction, Long idPlanet, String name) {
         Planet planet = planetService.find(idPlanet);
-        Probe probe = new Probe();
         if(Math.abs(cordX) > planet.getMaxX() || Math.abs(cordY) > planet.getMaxY()) {
             throw new ProbeLandingException();
         }
-        probe.setCordX(cordX);
-        probe.setCordY(cordY);
-        probe.setDirection(direction);
-        probe.setName(name);
-        probe.setPlanet(planet);
+
+        Probe probe = new Probe(0L, cordX, cordY, name, planet, direction);
+
         return probeRepository.save(probe);
     }
 
     public Probe move(Long id, String commands) {
             Probe probe = probeRepository.findById(id)
                     .orElseThrow(() -> new ProbeNotFoundException(id));
-            for(String command: commands.split("")){
-                probe.move(command);
-            }
-            return probeRepository.save(probe);
+
+            return probeRepository.save(probe.move(commands));
     }
 
     public Probe info(Long id) {
@@ -67,11 +60,6 @@ public class ProbeService implements ProbeServiceInterface {
         if(Math.abs(cordX) > planet.getMaxX() || Math.abs(cordY) > planet.getMaxY()) {
             throw new ProbeLandingException();
         }
-        probe.setCordX(cordX);
-        probe.setCordY(cordY);
-        probe.setDirection(direction);
-        probe.setName(name);
-        probe.setPlanet(planet);
-        return probeRepository.save(probe);
+        return probeRepository.save(new Probe(probe.getId(), cordX, cordY, name, planet, direction));
     }
 }

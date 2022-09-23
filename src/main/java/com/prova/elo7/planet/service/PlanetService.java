@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -26,10 +24,7 @@ public class PlanetService implements PlanetServiceInterface {
     }
 
     public Planet create(int maxY, int maxX, String name) {
-        Planet planet = new Planet();
-        planet.setMaxX(maxX);
-        planet.setMaxY(maxY);
-        planet.setName(name);
+        Planet planet = new Planet(0L,maxY,maxX,name);
 
         return planetRepository.save(planet);
     }

@@ -5,7 +5,6 @@ import com.prova.elo7.planet.dataproviders.jpa.PlanetRepository;
 import com.prova.elo7.planet.dataproviders.jpa.entities.Planet;
 import com.prova.elo7.planet.exceptions.PlanetNotFoundException;
 import com.prova.elo7.planet.service.PlanetService;
-import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

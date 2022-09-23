@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/probe")

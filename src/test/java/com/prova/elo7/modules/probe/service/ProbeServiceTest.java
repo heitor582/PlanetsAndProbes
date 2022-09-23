@@ -150,11 +150,12 @@ public class ProbeServiceTest {
         void moveProbe(int initX, int initY, Direction initDirection, int finalX, int finalY, Direction finalDirection, String commands) {
             Probe probe = ProbeMock.createProbe(1L, initX, initY, initDirection);
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
-            probeService.move(probe.getId(), commands);
+            given(probeRepository.save(any())).willReturn(probe.move(commands));
+            Probe movedProbe = probeService.move(probe.getId(), commands);
 
-            assertThat(probe.getCordX()).isEqualTo(finalX);
-            assertThat(probe.getCordY()).isEqualTo(finalY);
-            assertThat(probe.getDirection()).isEqualTo(finalDirection);
+            assertThat(movedProbe.getCordX()).isEqualTo(finalX);
+            assertThat(movedProbe.getCordY()).isEqualTo(finalY);
+            assertThat(movedProbe.getDirection()).isEqualTo(finalDirection);
         }
 
         @Test
@@ -180,8 +181,9 @@ public class ProbeServiceTest {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
             given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
+            given(probeRepository.save(any())).willReturn(new Probe(probe.getId(), 3, 4, probe.getName(),probe.getPlanet(), Direction.RIGHT));
 
-            probeService.update(
+           Probe updatedProbe = probeService.update(
               probe.getId(),
               3,
               4,
@@ -189,9 +191,9 @@ public class ProbeServiceTest {
                     probe.getPlanet().getId(),
                     probe.getName()
             );
-            assertThat(probe.getCordY()).isEqualTo(4);
-            assertThat(probe.getCordX()).isEqualTo(3);
-            assertThat(probe.getDirection()).isEqualTo(Direction.RIGHT);
+            assertThat(updatedProbe.getCordY()).isEqualTo(4);
+            assertThat(updatedProbe.getCordX()).isEqualTo(3);
+            assertThat(updatedProbe.getDirection()).isEqualTo(Direction.RIGHT);
         }
     }
 }

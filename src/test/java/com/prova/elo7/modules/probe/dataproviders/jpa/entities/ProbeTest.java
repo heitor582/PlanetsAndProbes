@@ -21,11 +21,11 @@ public class ProbeTest {
         @DisplayName("Move probe")
         void moveProbe(int initX, int initY, Direction initDirection, int finalX, int finalY, Direction finalDirection, String command) {
             Probe probe = ProbeMock.createProbe(1L, initX, initY, initDirection);
-            probe.move(command);
+            Probe movedProbe = probe.move(command);
 
-            assertThat(probe.getCordX()).isEqualTo(finalX);
-            assertThat(probe.getCordY()).isEqualTo(finalY);
-            assertThat(probe.getDirection()).isEqualTo(finalDirection);
+            assertThat(movedProbe.getCordX()).isEqualTo(finalX);
+            assertThat(movedProbe.getCordY()).isEqualTo(finalY);
+            assertThat(movedProbe.getDirection()).isEqualTo(finalDirection);
         }
 
         private static Stream<Arguments> provideProbeInitAndFinal() {
