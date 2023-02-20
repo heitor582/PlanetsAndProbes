@@ -17,13 +17,8 @@ public class ProbeControllerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-    @ExceptionHandler(value = {MoveCommandException.class})
-    public ResponseEntity<Object> handleWrongMoveCommand(MoveCommandException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
-
-    @ExceptionHandler(value = {ProbeLandingException.class})
-    public ResponseEntity<Object> handleWrongMoveCommand(ProbeLandingException e) {
+    @ExceptionHandler(value = {MoveCommandException.class, ProbeLandingException.class})
+    public ResponseEntity<Object> handleWrongMoveCommand(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }

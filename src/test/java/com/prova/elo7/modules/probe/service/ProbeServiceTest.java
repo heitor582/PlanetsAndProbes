@@ -52,7 +52,7 @@ public class ProbeServiceTest {
         @DisplayName("Create Probe")
         void createProbe() {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
-            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            given(planetServiceInterface.findBy(any())).willReturn(probe.getPlanet());
             given(probeRepository.save(any())).willReturn(probe);
             Probe createdProbe = probeService.create(
               probe.getCordX(),
@@ -69,7 +69,7 @@ public class ProbeServiceTest {
         @DisplayName("Not create Probe when planet not exists")
         void notCreateProbe() {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
-            given(planetServiceInterface.find(any())).willThrow(PlanetNotFoundException.class);
+            given(planetServiceInterface.findBy(any())).willThrow(PlanetNotFoundException.class);
             assertThatThrownBy(() -> probeService.create(
                     probe.getCordX(),
                     probe.getCordY(),
@@ -83,7 +83,7 @@ public class ProbeServiceTest {
         @DisplayName("Not create Probe when try to landing out of bound")
         void notCreateProbeOutOfBound() {
             Probe probe = ProbeMock.createProbe(1L,5,-7, Direction.UP);
-            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            given(planetServiceInterface.findBy(any())).willReturn(probe.getPlanet());
             assertThatThrownBy(() -> probeService.create(
                     probe.getCordX(),
                     probe.getCordY(),
@@ -119,7 +119,7 @@ public class ProbeServiceTest {
         void findProbeById() {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
-            Probe foundProbe = probeService.info(probe.getId());
+            Probe foundProbe = probeService.findBy(probe.getId());
             assertThat(foundProbe).isEqualTo(foundProbe);
         }
 
@@ -127,7 +127,7 @@ public class ProbeServiceTest {
         @DisplayName("Not find probe by id")
         void notFindProbeById() {
             given(probeRepository.findById(any())).willReturn(Optional.empty());
-            assertThatThrownBy(() -> probeService.info(any())).isInstanceOf(ProbeNotFoundException.class);
+            assertThatThrownBy(() -> probeService.findBy(any())).isInstanceOf(ProbeNotFoundException.class);
         }
 
         @Test
@@ -194,7 +194,7 @@ public class ProbeServiceTest {
         @DisplayName("Update probe by id")
         void updateProbe() {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
-            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            given(planetServiceInterface.findBy(any())).willReturn(probe.getPlanet());
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
             given(probeRepository.save(any())).willReturn(new Probe(probe.getId(), 3, 4, probe.getName(),probe.getPlanet(), Direction.RIGHT));
 

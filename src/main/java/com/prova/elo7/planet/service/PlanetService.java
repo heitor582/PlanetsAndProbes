@@ -19,7 +19,7 @@ public class PlanetService implements PlanetServiceInterface {
         return planetRepository.findAll(page);
     }
 
-    public Planet find(Long id) {
+    public Planet findBy(Long id) {
         return planetRepository.findById(id).orElseThrow(() -> new PlanetNotFoundException(id));
     }
 

@@ -25,7 +25,7 @@ public class ProbeService implements ProbeServiceInterface {
     private final PlanetServiceInterface planetService;
 
     public Probe create(int cordX, int cordY, Direction direction, Long idPlanet, String name) {
-        Planet planet = planetService.find(idPlanet);
+        Planet planet = planetService.findBy(idPlanet);
         if(Math.abs(cordX) > planet.getMaxX() || Math.abs(cordY) > planet.getMaxY()) {
             throw new ProbeLandingException();
         }
@@ -44,7 +44,7 @@ public class ProbeService implements ProbeServiceInterface {
         return probeRepository.save(probe.move(commands, xAxes, yAxes));
     }
 
-    public Probe info(Long id) {
+    public Probe findBy(Long id) {
             return probeRepository.findById(id)
                     .orElseThrow(() -> new ProbeNotFoundException(id));
     }
@@ -61,7 +61,7 @@ public class ProbeService implements ProbeServiceInterface {
     public Probe update(Long id, int cordX, int cordY, Direction direction, Long idPlanet, String name) {
         Probe probe = probeRepository.findById(id)
                 .orElseThrow(() -> new ProbeNotFoundException(id));
-        Planet planet = planetService.find(idPlanet);
+        Planet planet = planetService.findBy(idPlanet);
         if(Math.abs(cordX) > planet.getMaxX() || Math.abs(cordY) > planet.getMaxY()) {
             throw new ProbeLandingException();
         }

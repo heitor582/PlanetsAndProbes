@@ -57,7 +57,7 @@ class PlanetServiceTest {
         void findPlanet() {
             Planet planet = PlanetMock.createPlanet(1L, 5, 5, "Teste");
             given(planetRepository.findById(planet.getId())).willReturn(Optional.of(planet));
-            Planet planetFound = planetService.find(planet.getId());
+            Planet planetFound = planetService.findBy(planet.getId());
             assertThat(planetFound).isEqualTo(planet);
         }
 
@@ -66,7 +66,7 @@ class PlanetServiceTest {
         void notFindPlanet() {
             Planet planet = PlanetMock.createPlanet(1L, 5, 5, "Teste");
             given(planetRepository.findById(planet.getId())).willReturn(Optional.empty());
-            assertThatThrownBy(() -> planetService.find(planet.getId())).isInstanceOf(PlanetNotFoundException.class);
+            assertThatThrownBy(() -> planetService.findBy(planet.getId())).isInstanceOf(PlanetNotFoundException.class);
         }
 
         @Test

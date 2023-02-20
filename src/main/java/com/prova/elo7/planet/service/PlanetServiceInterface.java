@@ -1,12 +1,11 @@
 package com.prova.elo7.planet.service;
 
+import com.prova.elo7.common.service.interfaces.DeleteServiceInterface;
+import com.prova.elo7.common.service.interfaces.FindAllServiceInterface;
+import com.prova.elo7.common.service.interfaces.FindByIdServiceInterface;
 import com.prova.elo7.planet.dataproviders.jpa.entities.Planet;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-public interface PlanetServiceInterface {
-    public Page<Planet> findAll(Pageable page);
-    public Planet find(Long id);
+public interface PlanetServiceInterface
+        extends FindAllServiceInterface<Planet>, FindByIdServiceInterface<Planet>, DeleteServiceInterface {
     public Planet create(int maxY, int maxX, String name);
-    public void delete(Long id);
 }

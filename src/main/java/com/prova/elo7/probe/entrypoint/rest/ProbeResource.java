@@ -91,7 +91,7 @@ public class ProbeResource {
             }
     )
     ResponseEntity<Probe> info(@PathVariable Long id) {
-        return ResponseEntity.ok(probeService.info(id));
+        return ResponseEntity.ok(probeService.findBy(id));
     }
 
     @DeleteMapping("/{id}")

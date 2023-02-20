@@ -68,7 +68,7 @@ public class PlanetResource {
             }
     )
     ResponseEntity<Planet> find(@PathVariable Long id) {
-        return ResponseEntity.ok(planetService.find(id));
+        return ResponseEntity.ok(planetService.findBy(id));
     }
 
     @DeleteMapping("/{id}")
