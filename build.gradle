@@ -48,5 +48,9 @@ bootJar {
 }
 
 jar {
-	enabled = true
+	enabled = false
+}
+
+springBoot {
+	mainClass = 'com.prova.elo7.Elo7Application'
 }

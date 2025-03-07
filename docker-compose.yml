@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - postgres
     environment:
@@ -13,11 +13,12 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_DATASOURCE=jdbc:postgresql://prova_postgres:5432/prova_postgres
       - PORT=8080
+      - FLYWAY_LOCATION=classpath:/db/migration
   postgres:
     image: postgres
     container_name: prova_postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       POSTGRES_USER: prova_postgres
       POSTGRES_PASSWORD: prova_postgres

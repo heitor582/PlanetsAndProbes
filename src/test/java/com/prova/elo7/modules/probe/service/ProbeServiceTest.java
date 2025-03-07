@@ -6,6 +6,7 @@ import com.prova.elo7.planet.service.PlanetServiceInterface;
 import com.prova.elo7.probe.dataproviders.jpa.ProbeRepository;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Direction;
 import com.prova.elo7.probe.dataproviders.jpa.entities.Probe;
+import com.prova.elo7.probe.exceptions.ProbeLandingException;
 import com.prova.elo7.probe.exceptions.ProbeNotFoundException;
 import com.prova.elo7.probe.service.ProbeService;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -46,6 +52,7 @@ public class ProbeServiceTest {
         @DisplayName("Create Probe")
         void createProbe() {
             Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
             given(probeRepository.save(any())).willReturn(probe);
             Probe createdProbe = probeService.create(
               probe.getCordX(),
@@ -70,6 +77,20 @@ public class ProbeServiceTest {
                     5L,
                     probe.getName()
             )).isInstanceOf(PlanetNotFoundException.class);
+        }
+
+        @Test
+        @DisplayName("Not create Probe when try to landing out of bound")
+        void notCreateProbeOutOfBound() {
+            Probe probe = ProbeMock.createProbe(1L,5,-7, Direction.UP);
+            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            assertThatThrownBy(() -> probeService.create(
+                    probe.getCordX(),
+                    probe.getCordY(),
+                    probe.getDirection(),
+                    probe.getPlanet().getId(),
+                    probe.getName()
+            )).isInstanceOf(ProbeLandingException.class);
         }
     }
 
@@ -108,6 +129,17 @@ public class ProbeServiceTest {
             given(probeRepository.findById(any())).willReturn(Optional.empty());
             assertThatThrownBy(() -> probeService.info(any())).isInstanceOf(ProbeNotFoundException.class);
         }
+
+        @Test
+        @DisplayName("Find all probes")
+        void findAll() {
+            Pageable page = PageRequest.of(0,10);
+            Probe probe1 = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            Probe probe2 = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            given(probeRepository.findAll(page)).willReturn(new PageImpl<Probe>(List.of(probe1,probe2)));
+            Page<Probe> probes = probeService.findAll(page);
+            assertThat(probes).isEqualTo(new PageImpl<Probe>(List.of(probe1,probe2)));
+        }
     }
 
     @Nested
@@ -118,11 +150,12 @@ public class ProbeServiceTest {
         void moveProbe(int initX, int initY, Direction initDirection, int finalX, int finalY, Direction finalDirection, String commands) {
             Probe probe = ProbeMock.createProbe(1L, initX, initY, initDirection);
             given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
-            Probe probeAfterMoved = probeService.move(probe.getId(), commands);
+            given(probeRepository.save(any())).willReturn(probe.move(commands, List.of(), List.of()));
+            Probe movedProbe = probeService.move(probe.getId(), commands);
 
-            assertThat(probe.getCordX()).isEqualTo(finalX);
-            assertThat(probe.getCordY()).isEqualTo(finalY);
-            assertThat(probe.getDirection()).isEqualTo(finalDirection);
+            assertThat(movedProbe.getCordX()).isEqualTo(finalX);
+            assertThat(movedProbe.getCordY()).isEqualTo(finalY);
+            assertThat(movedProbe.getDirection()).isEqualTo(finalDirection);
         }
 
         @Test
@@ -132,11 +165,50 @@ public class ProbeServiceTest {
             assertThatThrownBy(() -> probeService.move(any(), "LMLMLMLMM")).isInstanceOf(ProbeNotFoundException.class);
         }
 
+        @Test
+        @DisplayName("Move with other probes in the same planet")
+        void moveWithOtherProbes() {
+            Probe probe = ProbeMock.createProbe(1L, 1, 2, Direction.UP);
+            String commands = "LLMMR";
+            given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
+            given(probeRepository.findProbesInSamePlanet(probe.getPlanet().getId())).willReturn(List.of(ProbeMock.createProbe(2L, 1, 1, Direction.UP)));
+            given(probeRepository.save(any())).willReturn(probe.move(commands, List.of(1), List.of(1)));
+            Probe movedProbe = probeService.move(probe.getId(), commands);
+
+            assertThat(movedProbe.getCordX()).isEqualTo(1);
+            assertThat(movedProbe.getCordY()).isEqualTo(2);
+            assertThat(movedProbe.getDirection()).isEqualTo(Direction.LEFT);
+        }
+
         private static Stream<Arguments> provideProbeInitAndFinal() {
             return Stream.of(
-                    Arguments.of(1, 2, Direction.UP, 2, 3, Direction.UP, "LMLMLMLMM"),
+                    Arguments.of(1, 2, Direction.UP, 1, 3, Direction.UP, "LMLMLMLMM"),
                     Arguments.of(3, 3, Direction.RIGHT, 5, 1, Direction.UP, "MMRMMRMRRML")
             );
+        }
+    }
+
+    @Nested
+    class UpdateProbe {
+        @Test
+        @DisplayName("Update probe by id")
+        void updateProbe() {
+            Probe probe = ProbeMock.createProbe(1L,1,2, Direction.UP);
+            given(planetServiceInterface.find(any())).willReturn(probe.getPlanet());
+            given(probeRepository.findById(probe.getId())).willReturn(Optional.of(probe));
+            given(probeRepository.save(any())).willReturn(new Probe(probe.getId(), 3, 4, probe.getName(),probe.getPlanet(), Direction.RIGHT));
+
+           Probe updatedProbe = probeService.update(
+              probe.getId(),
+              3,
+              4,
+              Direction.RIGHT,
+                    probe.getPlanet().getId(),
+                    probe.getName()
+            );
+            assertThat(updatedProbe.getCordY()).isEqualTo(4);
+            assertThat(updatedProbe.getCordX()).isEqualTo(3);
+            assertThat(updatedProbe.getDirection()).isEqualTo(Direction.RIGHT);
         }
     }
 }

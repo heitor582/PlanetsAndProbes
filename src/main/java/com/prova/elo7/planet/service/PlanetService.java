@@ -5,9 +5,9 @@ import com.prova.elo7.planet.dataproviders.jpa.entities.Planet;
 import com.prova.elo7.planet.exceptions.PlanetNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +15,8 @@ import java.util.List;
 public class PlanetService implements PlanetServiceInterface {
     private final PlanetRepository planetRepository;
 
-    public List<Planet> findAll() {
-        return planetRepository.findAll();
+    public Page<Planet> findAll(Pageable page) {
+        return planetRepository.findAll(page);
     }
 
     public Planet find(Long id) {
@@ -24,10 +24,7 @@ public class PlanetService implements PlanetServiceInterface {
     }
 
     public Planet create(int maxY, int maxX, String name) {
-        Planet planet = new Planet();
-        planet.setMaxX(maxX);
-        planet.setMaxY(maxY);
-        planet.setName(name);
+        Planet planet = new Planet(0L,maxY,maxX,name);
 
         return planetRepository.save(planet);
     }

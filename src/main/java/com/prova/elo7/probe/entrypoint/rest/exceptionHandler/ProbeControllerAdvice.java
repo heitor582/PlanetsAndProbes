@@ -1,6 +1,7 @@
 package com.prova.elo7.probe.entrypoint.rest.exceptionHandler;
 
 import com.prova.elo7.probe.exceptions.MoveCommandException;
+import com.prova.elo7.probe.exceptions.ProbeLandingException;
 import com.prova.elo7.probe.exceptions.ProbeNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,11 @@ public class ProbeControllerAdvice {
 
     @ExceptionHandler(value = {MoveCommandException.class})
     public ResponseEntity<Object> handleWrongMoveCommand(MoveCommandException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(value = {ProbeLandingException.class})
+    public ResponseEntity<Object> handleWrongMoveCommand(ProbeLandingException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }
